@@ -1,0 +1,27 @@
+<form [formGroup]="form" autocomplete="off" (submit)="onSubmit()">
+    <div class="container">
+        <div class="row" *ngFor="let formControl of formControls">
+            <div class="col-lg-12">
+                <div class="form-group" *ngIf='(formControl.type !== "hidden" && (!formControl.hidden)); else hiddenBlock'>
+                    <label [for]="formControl.name"> {{formControl.fieldLabel}}</label>
+                    <div *ngIf="formControl.type == 'select'">
+                        <select [class]="formControl.cls" [formControlName]="formControl.name" [id]="formControl.name" [ngClass]="{'is-invalid': form.controls[formControl.name].touched && form.controls[formControl.name].errors}">
+                            <option value="">-Select {{ formControl.fieldLabel }}-</option>
+                            <option *ngFor="let _option of formControl.collection;" value="{{_option[formControl.valueField]}}">{{ _option[formControl.displayField] }}</option>
+                        </select>
+                    </div>
+                    <div *ngIf="formControl.type == 'textarea'">
+                        <textarea [class]="formControl.cls" [formControlName]="formControl.name" [id]="formControl.name" [ngClass]="{'is-invalid': form.controls[formControl.name].touched && form.controls[formControl.name].errors}" placeholder="Enter property key"></textarea>
+                    </div>
+                    <div *ngIf="formControl.type !== 'textarea' && formControl.type !== 'select'">
+                        <input [type]="formControl.type" [class]="formControl.cls" [formControlName]="formControl.name" [id]="formControl.name" placeholder="Enter property key" [ngClass]="{'is-invalid': form.controls[formControl.name].touched && form.controls[formControl.name].errors}">
+                    </div>
+                    <app-control-messages [control]="form.controls[formControl.name]"></app-control-messages>
+                </div>
+                <ng-template #hiddenBlock>
+                    <input [type]="formControl.type" [class]="formControl.cls" [formControlName]="formControl.name">
+                </ng-template>
+            </div>
+        </div>
+    </div>
+</form>
